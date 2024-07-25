@@ -8,7 +8,7 @@ class Asset  extends BaseClass
         $file = $this->data['file'];
 
 
-        $filePath = DOC_ROOT . '/ui/dist/assets/' . $file;  // مسیر دایرکتوری که فایل‌های شما در آن ذخیره شده است
+        $filePath = DOC_ROOT . '/ui/dist' . $file;  // مسیر دایرکتوری که فایل‌های شما در آن ذخیره شده است
 
         // بررسی وجود فایل
         if (file_exists($filePath)) {
