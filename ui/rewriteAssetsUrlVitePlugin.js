@@ -4,7 +4,7 @@ export default function customAssetUrlPlugin() {
     enforce: 'post',
     transformIndexHtml(html) {
       return html.replace(/(["'])\/assets\/(.*?)\1/g, (_, quote, file) => {
-        return `${quote}/index.php?loadbalance=true&action=asset&file=${file}${quote}`;
+        return `${quote}/?loadbalance=true&action=asset&file=${file}${quote}`;
       });
     },
     generateBundle(_, bundle) {
@@ -15,7 +15,7 @@ export default function customAssetUrlPlugin() {
             const code = chunk.source;
             if (typeof code === 'string') {
               chunk.source = code.replace(/(["'])\/assets\/(.*?)\1/g, (_, quote, file) => {
-                return `${quote}/index.php?loadbalance=true&action=asset&file=${file}${quote}`;
+                return `${quote}/?loadbalance=true&action=asset&file=${file}${quote}`;
               });
             }
           }
