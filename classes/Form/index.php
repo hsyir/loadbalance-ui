@@ -4,8 +4,7 @@ class Form extends BaseClass
 {
     public function run()
     {
-        require DOC_ROOT . '/ui/dist/index.html';
-        echo "salam";
+        include DOC_ROOT . '/ui/dist/index.html';
     }
 }
 

@@ -11,6 +11,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/loadbalance-ui-main/ui/dist/',
   plugins: [
     VueRouter(),
     Vue({
