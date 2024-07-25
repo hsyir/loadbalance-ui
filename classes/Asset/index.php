@@ -1,9 +1,10 @@
 <?php
 
-class Form extends BaseClass
+class Asset  extends BaseClass
 {
     public function run()
     {
+
         $file = $this->data['file'];
 
 
