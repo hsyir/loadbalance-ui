@@ -1,7 +1,7 @@
 <template>
-  <div>Salam
+  <div>About
 
-  <v-btn :to="{name:'about'}">hope</v-btn>
+  <v-btn :to="{name:'home'}">Home</v-btn>
 
 
   </div>
