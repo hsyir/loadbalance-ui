@@ -7,3 +7,5 @@ class BaseClass{
         $this->data = $data;
     }
 }
+
+echo "mananm";

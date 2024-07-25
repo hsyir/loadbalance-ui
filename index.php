@@ -1,14 +1,28 @@
 <?php
 
-if($_GET['loadbalance'] != 'true') {
+if(isset($_GET['loadbalance']) and $_GET['loadbalance'] != 'true') {
     return false;
 }
 
-require "./classes/BaseClass.php";
 
-$action = $_REQUEST['action'];
+define('DOC_ROOT', __DIR__);
 
-require "./classes/$action/index.php";
+
+//var_dump($_REQUEST);
+require __DIR__ . "/classes/BaseClass.php";
+
+//die(__DIR__ . "/classes/{$action}/index2.php");
+
+$action = ucfirst($_REQUEST['action']);
+//var_dump($action);
+
+
+//die(__DIR__ . "/classes/".$action."/index.php");
+require __DIR__ . "/classes/".$action."/index.php";
+
 $class = new $action($_REQUEST);
+
 $class->run();
 
+
+exit;
