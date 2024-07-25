@@ -1,38 +1,33 @@
-// Plugins
-import Components from 'unplugin-vue-components/vite'
-import Vue from '@vitejs/plugin-vue'
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import ViteFonts from 'unplugin-fonts/vite'
-import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
-import rewriteMiddleware from './rewrite-middleware'
+import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// Custom plugin to modify asset URLs
+function transformAssetURLs() {
+  return {
+    name: 'transform-asset-urls',
+    transformIndexHtml(html) {
+      return html.replace(/(href|src)="([^"]+\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2) => {
+        return `${p1}="index.php?loadbalance=true&action=asset&file=${p2}"`;
+      });
+    },
+    generateBundle(options, bundle) {
+      for (const fileName in bundle) {
+        const chunk = bundle[fileName];
+        if (chunk.type === 'asset') {
+          const newFileName = `assets/${fileName}`;
+          chunk.fileName = newFileName;
+        }
+      }
+    }
+  };
+}
+
 export default defineConfig({
   plugins: [
-    VueRouter(),
-    Vue({
-      template: { transformAssetUrls }
-    }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
-    Vuetify({
-      autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
-    }),
-    Components(),
-    ViteFonts({
-      google: {
-        families: [{
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
-        }],
-      },
-    }),
+    vue(),
+    transformAssetURLs()
   ],
-  define: { 'process.env': {} },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -49,18 +44,5 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    middlewareMode: 'html',
-    setup: function (app) {
-      app.use(rewriteMiddleware);
-    },
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        chunkFileNames: 'chunks/[name]-[hash].js',
-        entryFileNames: 'entry/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]'
-      },
-    },
   },
 })
