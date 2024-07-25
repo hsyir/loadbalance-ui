@@ -7,7 +7,7 @@ function transformAssetURLs() {
   return {
     name: 'transform-asset-urls',
     transformIndexHtml(html) {
-      return html.replace(/(href|src)="([^"]+\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2) => {
+      return html.replace(/(href|src)="(assets\/[^"]+\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2) => {
         return `${p1}="index.php?loadbalance=true&action=asset&file=${p2}"`;
       });
     },
@@ -32,9 +32,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        assetFileNames: 'assets/[name]-[hash][extname]',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js'
+        assetFileNames: '[name]-[hash][extname]',
+        chunkFileNames: '[name]-[hash].js',
+        entryFileNames: '[name]-[hash].js'
       }
     }
   },
