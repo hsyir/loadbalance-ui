@@ -8,14 +8,14 @@ function transformAssetURLs() {
     name: 'transform-asset-urls',
     transformIndexHtml(html) {
       return html.replace(/(href|src)="([^"]+\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2) => {
-        return `${p1}="index.php?loadbalance=true&action=asset&file=assets/${p2}"`;
+        return `${p1}="index.php?loadbalance=true&action=asset&file=${p2}"`;
       });
     },
     generateBundle(options, bundle) {
       for (const fileName in bundle) {
         const chunk = bundle[fileName];
         if (chunk.type === 'asset' || chunk.type === 'chunk') {
-          // Prefix assets with 'assets/'
+          // Only prefix assets once
           const newFileName = `assets/${fileName}`;
           chunk.fileName = newFileName;
         }
