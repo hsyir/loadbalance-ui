@@ -7,17 +7,22 @@ function transformAssetURLs() {
   return {
     name: 'transform-asset-urls',
     transformIndexHtml(html) {
-      return html.replace(/(href|src)="(assets\/[^"]+\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2) => {
-        return `${p1}="index.php?loadbalance=true&action=asset&file=${p2}"`;
+      // Ensure assets are prefixed correctly without duplication
+      return html.replace(/(href|src)="([^"]+)(\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2, p3) => {
+        // Only add 'assets/' if it does not already exist
+        const newUrl = p2.includes('assets/') ? `${p2}${p3}` : `assets/${p2}${p3}`;
+        return `${p1}="?loadbalance=true&action=asset&file=${newUrl}"`;
       });
     },
     generateBundle(options, bundle) {
       for (const fileName in bundle) {
         const chunk = bundle[fileName];
         if (chunk.type === 'asset' || chunk.type === 'chunk') {
-          // Only prefix assets once
-          const newFileName = `assets/${fileName}`;
-          chunk.fileName = newFileName;
+          // Prefix assets only once
+          if (!fileName.startsWith('assets/')) {
+            const newFileName = `assets/${fileName}`;
+            chunk.fileName = newFileName;
+          }
         }
       }
     }
@@ -32,9 +37,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        assetFileNames: '[name]-[hash][extname]',
-        chunkFileNames: '[name]-[hash].js',
-        entryFileNames: '[name]-[hash].js'
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js'
       }
     }
   },
