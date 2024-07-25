@@ -8,13 +8,14 @@ function transformAssetURLs() {
     name: 'transform-asset-urls',
     transformIndexHtml(html) {
       return html.replace(/(href|src)="([^"]+\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2) => {
-        return `${p1}="?loadbalance=true&action=asset&file=${p2}"`;
+        return `${p1}="index.php?loadbalance=true&action=asset&file=assets/${p2}"`;
       });
     },
     generateBundle(options, bundle) {
       for (const fileName in bundle) {
         const chunk = bundle[fileName];
-        if (chunk.type === 'asset') {
+        if (chunk.type === 'asset' || chunk.type === 'chunk') {
+          // Prefix assets with 'assets/'
           const newFileName = `assets/${fileName}`;
           chunk.fileName = newFileName;
         }
@@ -28,6 +29,15 @@ export default defineConfig({
     vue(),
     transformAssetURLs()
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js'
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
