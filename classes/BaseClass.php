@@ -1,11 +1,9 @@
 <?php
 
 class BaseClass{
-    private $data;
+    protected $data;
 
     public function __construct($data){
         $this->data = $data;
     }
 }
-
-echo "mananm";
