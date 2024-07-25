@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
+import vuetify from 'vite-plugin-vuetify'
 
 // Custom plugin to modify asset URLs
 function transformAssetURLs() {
@@ -31,8 +32,8 @@ function transformAssetURLs() {
 
 export default defineConfig({
   plugins: [
-    vue(),
-    transformAssetURLs()
+    vue(), vuetify(), 
+    // transformAssetURLs()
   ],
   build: {
     rollupOptions: {
