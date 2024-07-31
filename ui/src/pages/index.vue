@@ -12,7 +12,7 @@
         <tr v-for="item in allLines[selected_line]['outputs_count']">
           <td>output-{{ item }}</td>
           <td><v-text-field variant="outlined" color="primary" compact="density" v-model="output_percents[item - 1]"  />
-            <v-slider v-model="output_percents[item - 1]"  step="1" color="primary"/>
+            <v-slider v-model="output_percents[item - 1]"  step="5" color="primary"/>
           </td>
         </tr>
       </table>
