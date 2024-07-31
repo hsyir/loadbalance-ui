@@ -15,6 +15,7 @@
         </v-row>
       </v-container>
     </v-main>
+    <notifications  position="bottom center" class="mb-10" duration="5"/>
   </v-app>
 </template>
 
