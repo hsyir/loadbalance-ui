@@ -18,7 +18,7 @@
         <v-slide-y-transition>
           <v-row v-if="selected_line != ''">
             <v-col cols="12" sm="6" md="4" lg="3" v-for="item in allLines[selected_line]['outputs_count']">
-              <v-text-field :label="'output-' + item" class="border-0 mb-n2" max="50"
+              <v-text-field :label="'output-' + item" class="border-0 mb-n2"
                 :color="output_percents[item - 1] < 0 || output_percents[item - 1] > 100 ? 'error' : 'primary'"
                 density="compact" v-model="output_percents[item - 1]" />
               <v-slider v-model="output_percents[item - 1]" step="5" min="0" max="100"
@@ -55,7 +55,9 @@
             <v-alert type="error" variant="tonal" border>There is some problem ...</v-alert>
           </div>
         </v-slide-y-transition>
+
         <div class="text-center  ">
+          {{ postData }}
           <v-btn variant="tonal" class="border border-primary border-opacity-100" :loading="loading" color="primary"
             :disabled="!validation" block @click="storeData">Send Data</v-btn>
         </div>
@@ -101,7 +103,26 @@ export default {
         && (this.output_percents.every(item => item >= 0 && item <= 100))
         && (this.selected_line && this.selected_tc && this.selected_week)
       )
-    }
+    },
+    postData() {
+      if (!this.selected_line) return;
+
+      return {
+        smartapi: `${this.selected_line}-${this.selected_week}-${this.selected_tc}`,
+        out_total: this.allLines[this.selected_line]['outputs_count'],
+        out_percent: (() => {
+     
+          let outputs = {};
+
+          for (let i = 1; i <= this.allLines[this.selected_line]['outputs_count']; i++) {
+            outputs['out-' + i] = this.output_percents[i - 1];
+          }
+          return outputs
+     
+        })()
+      }
+
+    },
 
   },
   watch: {
@@ -109,9 +130,11 @@ export default {
       deep: true,
       handler(newVal) {
         this.output_percents = [];
+        this.selected_tc = "";
         for (let i = 0; i < this.allLines[this.selected_line]['outputs_count']; i++) {
           this.output_percents[i] = 0
         }
+
       }
     },
     output_percents: {
@@ -124,9 +147,8 @@ export default {
   methods: {
     async storeData() {
       this.loading = true;
-      const { data } = await axios.post('http://localhost:3005/api/setData');
+      const { data } = await axios.post('http://127.0.0.1/tmp/output-percent/post/set-smartapi-percent-post.php', this.postData);
       if (data.status == 1) {
-        console.log("ssssss")
         this.$notify({
           type: 'success',
           text: "Data has been stored SUCCESSFULLY!"

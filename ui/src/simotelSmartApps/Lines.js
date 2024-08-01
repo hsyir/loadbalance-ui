@@ -1,51 +1,45 @@
 export default {
-    line1: {
-        week: {
-            w1: ["tc1", "tc2"],
-            w2: ["tc1", "tc2"],
-        },
-        outputs_count: 3,
-    },
+   
     line2: {
         week: {
-            w1: ["tc1", "tc2"],
-            w2: ["tc1", "tc2"],
+            w1: ["tc1"],
+            w2: ["tc1"],
         },
-        outputs_count: 4,
-    },
-    line3: {
-        week: {
-            w1: ["tc1", "tc2"],
-            w2: ["tc1", "tc2"],
-        },
-        outputs_count: 2,
+        outputs_count: 8,
     },
     line4: {
         week: {
-            w1: ["tc1", "tc2"],
-            w2: ["tc1", "tc2"],
+            w1: ["tc1"],
+            w2: ["tc1"],
         },
-        outputs_count: 5,
+        outputs_count: 8,
     },
-    line5: {
+    line9: {
         week: {
-            w1: ["tc1", "tc2"],
-            w2: ["tc1", "tc2"],
+            w1: ["tc1"],
+            w2: ["tc1"],
         },
-        outputs_count: 1,
+        outputs_count: 8,
+    },
+    line3: {
+        week: {
+            w1: ["tc1", "tc2", "tc3", "tc4", "tc5"],
+            w2: ["tc1", "tc2", "tc3", "tc4"],
+        },
+        outputs_count: 8,
     },
     line6: {
         week: {
-            w1: ["tc1", "tc2"],
-            w2: ["tc1", "tc2"],
+            w1: ["tc1", "tc2", "tc3"],
+            w2: ["tc1", "tc2", "tc3"],
         },
-        outputs_count: 2,
+        outputs_count: 8,
     },
     line7: {
         week: {
-            w1: ["tc1", "tc2"],
-            w2: ["tc1", "tc2"],
+            w1: ["tc1", "tc2", "tc3"],
+            w2: ["tc1", "tc2", "tc3"],
         },
-        outputs_count: 2,
+        outputs_count: 8,
     },
 }
