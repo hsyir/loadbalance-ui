@@ -1,10 +1,6 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols=" 12">
-        <h1 class="mb-5">Simotel Load Balance System </h1>
-      </v-col>
-    </v-row>
+    update 2
     <v-row class="border rounded-lg pa-10">
       <v-col cols="6">
         <v-select :items="linesArray" v-model="selected_line" variant="outlined" color="primary" label="Selected Line"
@@ -51,16 +47,37 @@
       <v-col cols="12" class=" pa-1 mt-5 ">
 
         <v-slide-y-transition leave-absolute hide-on-leave>
-          <div v-if="!validation" class="mb-5">
+          <div v-if="!storeValidation" class="mb-5">
             <v-alert type="error" variant="tonal" border>There is some problem ...</v-alert>
           </div>
         </v-slide-y-transition>
 
-        <div class="text-center  ">
-          {{ postData }}
-          <v-btn variant="tonal" class="border border-primary border-opacity-100" :loading="loading" color="primary"
-            :disabled="!validation" block @click="storeData">Send Data</v-btn>
-        </div>
+        <v-row class="text-center  ">
+
+          <v-col cols="6">
+            <v-btn variant="tonal" class="border border-primary border-opacity-100" :loading="loading" color="primary"
+              :disabled="!storeValidation" block @click="storeData">Send Data</v-btn>
+          </v-col>
+          <v-col cols="6">
+
+            <v-btn variant="tonal" class="border border-success border-opacity-100" :loading="loading" color="success"
+              :disabled="!getValidation" block @click="getData">Get Data</v-btn>
+          </v-col>
+        </v-row>
+        <v-slide-y-transition leave-absolute hide-on-leave>
+          <v-row v-if="report?.out_number">
+            <v-col cols="12">
+              Lines report:
+            </v-col>
+            <v-col cols="12" class="px-10">
+              Out Total : {{ report?.out_number['out_total'] }}
+              <template v-for="i in 10">
+                {{ report.out_number['out-4'] }}
+                <div v-if="report?.out_number['out-' + i]">Out {{ i }} : {{ report?.out_number['out-' + i] }}</div>
+              </template>
+            </v-col>
+          </v-row>
+        </v-slide-y-transition>
       </v-col>
     </v-row>
   </v-container>
@@ -81,6 +98,7 @@ export default {
       output_percents: [],
       percents_sum: 0,
       loading: false,
+      report: null,
     }
   },
   methods: {},
@@ -97,28 +115,33 @@ export default {
       if (!this.selected_line) return;
       return this.allLines[this.selected_line]['week'][this.selected_week];
     },
-    validation() {
+    storeValidation() {
       return (
         this.percents_sum == 100
         && (this.output_percents.every(item => item >= 0 && item <= 100))
         && (this.selected_line && this.selected_tc && this.selected_week)
       )
     },
-    postData() {
+    getValidation() {
+      return (
+        (this.selected_line && this.selected_tc && this.selected_week)
+      )
+    },
+    preparedData() {
       if (!this.selected_line) return;
 
       return {
         smartapi: `${this.selected_line}-${this.selected_week}-${this.selected_tc}`,
         out_total: this.allLines[this.selected_line]['outputs_count'],
         out_percent: (() => {
-     
+
           let outputs = {};
 
           for (let i = 1; i <= this.allLines[this.selected_line]['outputs_count']; i++) {
             outputs['out-' + i] = this.output_percents[i - 1];
           }
           return outputs
-     
+
         })()
       }
 
@@ -147,14 +170,62 @@ export default {
   methods: {
     async storeData() {
       this.loading = true;
-      const { data } = await axios.post('http://127.0.0.1/tmp/output-percent/post/set-smartapi-percent-post.php', this.postData);
-      if (data.status == 1) {
-        this.$notify({
-          type: 'success',
-          text: "Data has been stored SUCCESSFULLY!"
+      try {
+        const { data } = await axios.post('http://185.211.85.6/tmp/output-percent/post/set-smartapi-percent-post.php', this.preparedData, {
+          withCredentials: true,
+          auth: {
+            username: 'tipax',
+            password: 'tipax'
+          }
         });
+        if (data.status == 1) {
+          this.$notify({
+            type: 'success',
+            text: "Data has been stored SUCCESSFULLY!"
+          });
 
+        }
       }
+      catch (error) {
+        console.log(error)
+      }
+      this.loading = false;
+    },
+    async getData() {
+      this.loading = true;
+      try {
+        let postdata = {
+          smartapi: this.preparedData.smartapi
+        }
+        const { data } = await axios.post('http://185.211.85.6/tmp/output-percent/post/get-smartapi-percent-post.php', postdata, {
+          withCredentials: true,
+          auth: {
+            username: 'tipax',
+            password: 'tipax'
+          }
+        });
+        if (data.status == 1) {
+
+          this.report = data;
+          for (let i = 1; i < 10; i++) {
+
+            if (this.report?.out_percent['out-' + i] != undefined)
+              this.output_percents[i - 1] = this.report?.out_percent['out-' + i];
+            else
+              this.output_percents[i - 1] = 0
+          }
+
+          this.$notify({
+            type: 'success',
+            text: "Data Fetched!"
+          });
+
+        }
+      }
+      catch (error) {
+        console.log(error)
+      }
+
       this.loading = false;
     }
   },

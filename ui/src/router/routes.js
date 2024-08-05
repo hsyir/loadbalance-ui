@@ -3,7 +3,7 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 // //public
 import Homepage from '../pages/index.vue';
 
-import About from '../pages/about.vue';
+import Report from '../pages/report.vue';
 
 const baseRoutes = [
   {
@@ -14,8 +14,8 @@ const baseRoutes = [
 
   {
     path: '/',
-    component: About,
-    name: "about",
+    component: Report,
+    name: "report",
   },
 
 ];
