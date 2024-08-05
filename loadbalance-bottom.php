@@ -4,7 +4,7 @@
 var loadbalanceIntervalId = null;
 document.addEventListener('DOMContentLoaded', (event) => {
 
-    loadbalanceIntervalId = setInterval(insertLoadbalanceMenu, 10);
+    loadbalanceIntervalId = setInterval(insertLoadbalanceMenu, 1000);
 
 });
 function insertLoadbalanceMenu(){
