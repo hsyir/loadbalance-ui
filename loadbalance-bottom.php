@@ -1,8 +1,15 @@
 <script>
+
+    
+var loadbalanceIntervalId = null;
 document.addEventListener('DOMContentLoaded', (event) => {
-    // پیدا کردن المان li با href و data-page-id مورد نظر
-    setTimeout(()=>{
-        const targetAnchor = document.querySelector('a[href="#maintenance_system_log"][data-page-id="maintenance_system_log"]');
+
+    loadbalanceIntervalId = insertLoadbalanceMenu(insertLoadbalanceMenu, 3000);
+
+});
+function insertLoadbalanceMenu(){
+
+    const targetAnchor = document.querySelector('a[href="#maintenance_system_log"][data-page-id="maintenance_system_log"]');
 
     if (targetAnchor) {
         const targetElement = targetAnchor.parentNode;
@@ -17,9 +24,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         // اضافه کردن المان جدید بعد از المان هدف
         targetElement.parentNode.insertBefore(newElement, targetElement.nextSibling);
+        
+        clearInterval(loadbalanceIntervalId);
+
     } else {
         console.error('Element not found');
     }
-    },5000)
-});
+}
     </script>
