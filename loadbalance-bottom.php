@@ -17,7 +17,7 @@ function insertLoadbalanceMenu(){
         // ایجاد المان جدید li
         const newElement = document.createElement('li');
         newElement.innerHTML = `
-            <a href="/?loadbalance=true&action=form" >
+            <a href="/?loadbalance=true&action=form&id=maintenance_settings&type=page&token=${userToken}" >
                 <span class="icon "></span>Load Balance
             </a>
         `;
