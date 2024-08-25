@@ -6,10 +6,10 @@
 
 if(isset($_GET['loadbalance']) and $_GET['loadbalance'] == 'true') {
 
-    $contentId = isset($_POST['id']) ? $_POST['id'] : "";
-    $contentType = isset($_POST['type']) ? $_POST['type'] : "";
-    $userToken = isset($_POST['token']) ? $_POST['token'] : "";
-    $userData = isset($_POST['data']) ? $_POST['data'] : "{}";
+    $contentId = isset($_GET['id']) ? $_GET['id'] : "";
+    $contentType = isset($_GET['type']) ? $_GET['type'] : "";
+    $userToken = isset($_GET['token']) ? $_GET['token'] : "";
+    $userData = isset($_GET['data']) ? $_GET['data'] : "{}";
 
     require_once __DIR__ . "/../html/pages/maintenance/maintenance.php";
     if(Maintenance::userHasAccess($userToken, $contentId, $contentType, $userData)) {
