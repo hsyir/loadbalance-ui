@@ -3,7 +3,9 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 // //public
 import Homepage from '../pages/index.vue';
 
-import Report from '../pages/report.vue';
+import RulesIndex from '../pages/rules/Index.vue';
+import RulesCreate from '../pages/rules/Create.vue';
+import RulesShow from '../pages/rules/Show.vue';
 
 const baseRoutes = [
   {
@@ -13,9 +15,20 @@ const baseRoutes = [
   },
 
   {
-    path: '/',
-    component: Report,
-    name: "report",
+    path: '/rules',
+    component: RulesIndex,
+    name: "rules.index",
+  },
+  {
+    path: '/rules/:rule_id/show',
+    component: RulesShow,
+    name: "rules.show",
+    props: true,
+  },
+  {
+    path: '/rules/create',
+    component: RulesCreate,
+    name: "rules.create",
   },
 
 ];

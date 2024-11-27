@@ -9,7 +9,7 @@ const light = {
     'info': "#2196F3",
     'on-surface-variant': "#EEEEEE",
     'primary': "#2196F3",
-    'secondary': "#3288b3",
+    'secondary': "#eee",
     'success': "#4CAF50",
     'surface': "#FFFFFF",
     'surface-variant': "#424242",
