@@ -3,6 +3,8 @@
     "Dashboard": "داشبورد",
     "Create": "ایجاد",
     "Back": "بازگشت",
+    "Close": "بستن",
+    "Force Submit": "ارسال اجباری",
     "Rules": "مسیر تماس",
     "Line Name": "عنوان مسیر",
     "Line": "مسیر",
@@ -15,6 +17,8 @@
     "Output Title": "عنوان خروجی",
     "Outputs": "خروجی ها",
     "Create New Rule": "ایجاد قانون جدید",
+    "The selected time range overlaps with another scheduled program." 
+        : "بازی زمانی انتخاب شده با یک یا چند قانون ثبت شده قبلی تداخل دارد.",
     "Check Sum": "صحت جمع درصد ها",
     "Day Of Week": "روز هفته",
     "Time From": "زمان شروع",
