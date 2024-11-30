@@ -3,14 +3,8 @@
     <v-row class="border rounded-lg pa-10">
       <v-col>
         <rule-form :rule="rule"></rule-form>
-        <v-btn
-          @click="createRule(false)"
-          :loading="loading"
-          color="primary"
-          rounded
-          class="me-1"
-          >{{ $t("Create") }}</v-btn
-        >
+        <v-btn @click="createRule(false)" :loading="loading" color="primary" rounded class="me-1">{{ $t("Create")
+          }}</v-btn>
         <v-btn to="/rules" rounded color="secondary">{{ $t("Back") }}</v-btn>
       </v-col>
     </v-row>
@@ -18,13 +12,7 @@
       <v-card>
         <v-card-title>{{ $t("Overlaped") }}!</v-card-title>
         <v-card-text>
-          <v-alert
-            color="red"
-            variant="outlined"
-            border="top"
-            type="warning"
-            class="mb-10"
-          >
+          <v-alert color="red" variant="outlined" border="top" type="warning" class="mb-10">
             {{
               $t(
                 "The selected time range overlaps with another scheduled program."
@@ -84,26 +72,31 @@ export default {
     async createRule(forceOnOverlap) {
       this.loading = true;
       this.rule.force_on_overlap = forceOnOverlap;
-      const { data } = await axios.post(
+
+      axios.post(
         this.backend_base_url + "/rules",
         this.rule
-      );
-      this.loading = false;
+      )
+        .then(res => {
+          this.$notify({
+            type: "success",
+            duration: 2000,
+            text: "Data has been stored SUCCESSFULLY!",
+          });
 
-      if (data.has_overlap) {
-        this.overlap_rules = data.overlap_rules;
-        this.overlapModal = true;
-        return;
-      }
+          this.$router.push("/rules/" + res.data.rule.id + "/show");
+        })
+        .catch(err => {
+          if (err.response.data.has_overlap) {
+            this.overlap_rules = err.response.data.overlap_rules;
+            this.overlapModal = true;
+          }
+        })
+        .then(() => {
+          this.loading = false;
+        })
 
-      this.overlapModal = false;
 
-      this.$notify({
-        type: "success",
-        text: "Data has been stored SUCCESSFULLY!",
-      });
-
-      this.$router.push("/rules/" + data.rule.id + "/show");
     },
   },
   computed: {},

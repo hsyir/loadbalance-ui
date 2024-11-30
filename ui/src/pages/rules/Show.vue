@@ -42,44 +42,19 @@
             <tfoot>
               <tr>
                 <td>
-                  <v-text-field
-                    class="my-1"
-                    v-model="new_output.name"
-                    variant="outlined"
-                    density="compact"
-                    rounded
-                  />
+                  <v-text-field class="my-1" v-model="new_output.name" variant="outlined" density="compact" rounded />
                 </td>
                 <td>
-                  <v-text-field
-                    v-if="false"
-                    variant="outlined"
-                    density="compact"
-                    rounded
-                    type="number"
-                    max="100"
-                    v-model="new_output.percent"
-                  />
-                  <v-slider
-                    v-model="new_output.percent"
-                    step="5"
-                    min="0"
-                    max="100"
-                  />
+                  <v-text-field v-if="false" variant="outlined" density="compact" rounded type="number" max="100"
+                    v-model="new_output.percent" />
+                  <v-slider v-model="new_output.percent" step="5" min="0" max="100" />
                 </td>
                 <td>
                   {{ new_output.percent }}
                 </td>
                 <td align="center">
-                  <v-btn
-                    rounded
-                    size="small"
-                    color="blue"
-                    variant="flat"
-                    @click="insertOutput"
-                    :disabled="!new_output.name || !new_output.percent"
-                    >{{ $t("Insert") }}</v-btn
-                  >
+                  <v-btn rounded size="small" color="blue" variant="flat" @click="insertOutput"
+                    :disabled="!new_output.name || !new_output.percent">{{ $t("Insert") }}</v-btn>
                 </td>
               </tr>
             </tfoot>
@@ -87,13 +62,7 @@
               <tr v-for="(output, i) in rule.outputs" :key="output">
                 <td>{{ output.name }}</td>
                 <td>
-                  <v-slider
-                    v-model="output.percent"
-                    step="5"
-                    min="0"
-                    max="100"
-                    density="compact"
-                  />
+                  <v-slider v-model="output.percent" step="5" min="0" max="100" density="compact" />
                 </td>
                 <td>{{ output.percent }}</td>
                 <td align="center">
@@ -108,14 +77,8 @@
 
         <hr class="my-2" />
 
-        <v-btn
-          @click="submitRuleOutputs"
-          :disabled="percents_sum != 100"
-          rounded
-          color="success"
-          class="me-2"
-          >{{ $t("Save") }}</v-btn
-        >
+        <v-btn @click="submitRuleOutputs" :disabled="percents_sum != 100" rounded color="success" class="me-2">{{
+          $t("Save") }}</v-btn>
         <v-btn to="/rules" rounded color="secondary">{{ $t("Back") }}</v-btn>
       </v-col>
     </v-row>
@@ -167,11 +130,31 @@ export default {
       this.percentFocused = false;
     },
     async submitRuleOutputs() {
-      const { data } = await axios.post(
+
+      axios.post(
         this.backend_base_url + "/rules/" + this.rule_id + "/outputs",
         { outputs: this.rule.outputs }
-      );
-      console.log(data);
+      )
+        .then((res) => {
+          this.$notify({
+            type: "success",
+            duration: 2000,
+            text: "Data has been stored SUCCESSFULLY!",
+          });
+
+        })
+        .catch(err => {
+
+          this.$notify({
+            type: "error",
+            duration: 2000,
+            text: "There is some errors!",
+
+          });
+
+        });
+
+
     },
   },
   computed: {},
