@@ -13,6 +13,7 @@
         <v-list>
           <v-list-item to="/">{{ $t("Dashboard") }}</v-list-item>
           <v-list-item to="/rules">{{ $t("Rules") }}</v-list-item>
+          <v-list-item to="/old-loadbalance">{{ $t("Old Loadbalance") }}</v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main>

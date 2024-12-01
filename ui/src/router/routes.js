@@ -6,6 +6,7 @@ import Homepage from '../pages/index.vue';
 import RulesIndex from '../pages/rules/Index.vue';
 import RulesCreate from '../pages/rules/Create.vue';
 import RulesShow from '../pages/rules/Show.vue';
+import OldLoadbalance from '../pages/OldLoadbalance.vue';
 
 const baseRoutes = [
   {
@@ -29,6 +30,11 @@ const baseRoutes = [
     path: '/rules/create',
     component: RulesCreate,
     name: "rules.create",
+  },
+  {
+    path: '/old-loadbalance',
+    component: OldLoadbalance,
+    name: "oldloadbalance",
   },
 
 ];

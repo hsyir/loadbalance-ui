@@ -31,15 +31,8 @@ export default defineConfig({
   plugins: [
     vue(),
     vuetify(), 
-    transformAssetURLs()
+    // transformAssetURLs()
   ],
-  css: {
-    preprocessorOptions: {
-      // scss: {
-      //   additionalData: `@import "@/styles/app.scss";`
-      // }
-    }
-  },
   build: {
     rollupOptions: {
       output: {
