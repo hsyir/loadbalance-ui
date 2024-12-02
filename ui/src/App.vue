@@ -14,6 +14,7 @@
           <v-list-item to="/">{{ $t("Dashboard") }}</v-list-item>
           <v-list-item to="/rules">{{ $t("Rules") }}</v-list-item>
           <v-list-item to="/old-loadbalance">{{ $t("Old Loadbalance") }}</v-list-item>
+          <v-list-item href="/">{{ $t("Back To Simotel") }}</v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main>
@@ -40,8 +41,8 @@ export default {
   provide() {
     return {
       page_title: "",
-      // backend_base_url: "http://127.0.0.1:8000/api/loadbalance",
-      backend_base_url: "/?loadbalance=true&action=proxy&url=",
+      backend_base_url: "http://127.0.0.1:8000/api/loadbalance",
+      // backend_base_url: "/?loadbalance=true&action=proxy&url=",
     };
   },
   data() {
