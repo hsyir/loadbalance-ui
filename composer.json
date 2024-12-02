@@ -1,0 +1,17 @@
+{
+    "name": "hsyir/loadbalance",
+    "autoload": {
+        "psr-4": {
+            "Megacom\\Loadbalance\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hossein Yaghmaee",
+            "email": "hosseinyaghmaee@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    }
+}

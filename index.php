@@ -1,5 +1,9 @@
 <?php
 
+require __DIR__ . "/vendor/autoload.php";
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 
 if (isset($_GET['loadbalance']) and $_GET['loadbalance'] == 'true') {
 
@@ -32,53 +36,37 @@ if (isset($_GET['loadbalance']) and $_GET['loadbalance'] == 'true') {
 function proxyRequest()
 {
 
-    // آدرس IP یا URL مقصد
-    $baseurl = "http://172.16.107.29/api/loadbalance";
 
-    $targetUrl = $baseurl . $_GET["url"];
-    // دریافت متد درخواست
-    $requestMethod = $_SERVER['REQUEST_METHOD'];
+    $client = new Client();
 
-    // دریافت هدرها
-    $headers = getallheaders();
+    try {
+        // آدرس مقصد برای ارسال درخواست‌ها
+        // $targetUrl = 'https://destination.example.com';
 
-    // دریافت بدنه درخواست
-    $requestBody = file_get_contents('php://input');
+        $baseurl = "http://172.16.107.29/api/loadbalance";
+        // $baseurl = "http://127.0.0.1:8000/api/loadbalance";
 
-    // مقداردهی اولیه cURL
-    $ch = curl_init($targetUrl);
+        $targetUrl = $baseurl . $_GET["url"];
 
-    // تنظیم متد درخواست
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $requestMethod);
+        // اطلاعات درخواست ورودی
+        $method = $_SERVER['REQUEST_METHOD']; // متد (GET, POST, PUT, DELETE, ...)
+        $headers = getallheaders();          // هدرهای درخواست
+        $body = file_get_contents('php://input'); // بدنه درخواست
 
-    // ارسال هدرها
-    $curlHeaders = [];
-    foreach ($headers as $key => $value) {
-        $curlHeaders[] = "$key: $value";
+        // ارسال درخواست به آدرس مقصد
+        $request = new Request($method, $targetUrl, $headers, $body);
+        $response = $client->send($request, ['http_errors' => false]);
+
+        // بازگرداندن پاسخ به درخواست‌دهنده اصلی
+        http_response_code($response->getStatusCode());
+        foreach ($response->getHeaders() as $name => $values) {
+            header($name . ': ' . implode(', ', $values));
+        }
+        echo $response->getBody();
+    } catch (Exception $e) {
+        // مدیریت خطاها
+        http_response_code(500);
+        echo "An error occurred: " . $e->getMessage();
     }
-
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $curlHeaders);
-
-    // ارسال بدنه درخواست
-    if (!empty($requestBody)) {
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
-    }
-
-    // دریافت پاسخ از مقصد
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    // اجرای درخواست
-    $response = curl_exec($ch);
-
-    // بررسی خطای احتمالی
-    if (curl_errno($ch)) {
-        echo 'Error: ' . curl_error($ch);
-    }
-
-    // بستن cURL
-    curl_close($ch);
-
-    // نمایش پاسخ دریافت شده از مقصد
-    return $response;
 
 }
