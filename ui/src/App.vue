@@ -34,12 +34,14 @@
 </template>
 
 <script>
+
 import AppFooter from "./components/AppFooter.vue";
 export default {
   provide() {
     return {
       page_title: "",
-      backend_base_url: "http://127.0.0.1:8000/api/loadbalance",
+      // backend_base_url: "http://127.0.0.1:8000/api/loadbalance",
+      backend_base_url: "http://172.16.107.29/api/loadbalance",
     };
   },
   data() {
