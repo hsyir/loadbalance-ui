@@ -8,7 +8,7 @@ function transformAssetURLs() {
   return {
     name: 'transform-asset-urls',
     transformIndexHtml(html) {
-      return html.replace(/(href|src)="([^"]+)(\.(js|css|png|jpg|jpeg|gif|svg))"/g, (match, p1, p2, p3) => {
+      return html.replace(/(href|src)="([^"]+)(\.(js|css|png|jpg|jpeg|gif|svg|woff))"/g, (match, p1, p2, p3) => {
         const newUrl = p2.includes('assets/') ? `${p2}${p3}` : `assets/${p2}${p3}`;
         return `${p1}="?loadbalance=true&action=asset&file=${newUrl}"`;
       });
@@ -31,7 +31,7 @@ export default defineConfig({
   plugins: [
     vue(),
     vuetify(), 
-    // transformAssetURLs()
+    transformAssetURLs()
   ],
   build: {
     rollupOptions: {

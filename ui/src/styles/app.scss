@@ -12,6 +12,9 @@
 
 @import 'fonts';
 
+$mdi-font-path: "/?loadbalance=true&action=asset&file=/assets";
+@import "@mdi/font/scss/materialdesignicons.scss";
+
 body{
     font-family: "vazir";
 }
