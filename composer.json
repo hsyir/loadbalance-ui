@@ -11,7 +11,12 @@
             "email": "hosseinyaghmaee@gmail.com"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
+    },
     "require": {
-        "guzzlehttp/guzzle": "7.5"
+        "guzzlehttp/guzzle": "7.0"
     }
 }
