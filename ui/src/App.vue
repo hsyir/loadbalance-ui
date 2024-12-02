@@ -40,8 +40,8 @@ export default {
   provide() {
     return {
       page_title: "",
-      backend_base_url: "http://127.0.0.1:8000/api/loadbalance",
-      // backend_base_url: "/?loadbalance=true&action=proxy&url=",
+      // backend_base_url: "http://127.0.0.1:8000/api/loadbalance",
+      backend_base_url: "/?loadbalance=true&action=proxy&url=",
     };
   },
   data() {
