@@ -22,13 +22,14 @@ if (isset($_GET['loadbalance']) and $_GET['loadbalance'] == 'true') {
         return;
     }
 
-    require_once __DIR__ . "/../html/pages/maintenance/maintenance.php";
+    // require_once __DIR__ . "/../html/pages/maintenance/maintenance.php";
 
-    if (Maintenance::userHasAccess($userToken, $contentId, $contentType, $userData)) {
-        require __DIR__ . '/loader.php';
-    } else {
-        die("403");
-    }
+    require __DIR__ . '/loader.php';
+    // if (Maintenance::userHasAccess($userToken, $contentId, $contentType, $userData)) {
+
+    // } else {
+    //     die("403");
+    // }
 
 }
 
@@ -44,7 +45,7 @@ function proxyRequest()
         // $targetUrl = 'https://destination.example.com';
 
         $baseurl = "http://172.16.107.29/api/loadbalance";
-        // $baseurl = "http://127.0.0.1:8000/api/loadbalance";
+        //$baseurl = "http://127.0.0.1:8000/api/loadbalance";
 
         $targetUrl = $baseurl . $_GET["url"];
 
@@ -62,7 +63,9 @@ function proxyRequest()
         foreach ($response->getHeaders() as $name => $values) {
             header($name . ': ' . implode(', ', $values));
         }
+
         echo $response->getBody();
+
     } catch (Exception $e) {
         // مدیریت خطاها
         http_response_code(500);
