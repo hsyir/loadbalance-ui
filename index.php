@@ -33,7 +33,7 @@ function proxyRequest()
 {
 
     // آدرس IP یا URL مقصد
-    $baseurl = "http://127.0.0.1:8000/api/loadbalance";
+    $baseurl = "http://172.16.107.29/api/loadbalance";
 
     $targetUrl = $baseurl . $_GET["url"];
     // دریافت متد درخواست
