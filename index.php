@@ -60,11 +60,12 @@ function proxyRequest()
 
         // بازگرداندن پاسخ به درخواست‌دهنده اصلی
         http_response_code($response->getStatusCode());
-        foreach ($response->getHeaders() as $name => $values) {
-            header($name . ': ' . implode(', ', $values));
-        }
+        // foreach ($response->getHeaders() as $name => $values) {
+        //     header($name . ': ' . implode(', ', $values));
+        // }
 
         echo $response->getBody();
+        exit;
 
     } catch (Exception $e) {
         // مدیریت خطاها
