@@ -5,7 +5,37 @@
         <v-btn to="/rules/create" color="primary" class="mb-2" variant="outlined" prepend-icon="mdi-plus"
           :loading="loading">
           {{ $t("Create New Rule") }}</v-btn>
-        <v-data-table :items="rules" :headers="headers">
+
+
+        <v-card class="mb-2">
+          <v-card-text>
+            <v-row>
+              <v-col>{{ $t("Filter") }}</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="4">
+                <v-select clearable :items="[
+                  { name: $t('Saturday'), value: '0' },
+                  { name: $t('Sunday'), value: '1' },
+                  { name: $t('Monday'), value: '2' },
+                  { name: $t('Tuesday'), value: '3' },
+                  { name: $t('Wednesday'), value: '4' },
+                  { name: $t('Thursday'), value: '5' },
+                  { name: $t('Friday'), value: '6' },
+                ]" item-title="name" item-value="value" variant="outlined" :label="$t('Day Of Week')" density="compact"
+                  v-model="filter.day"></v-select>
+              </v-col>
+
+              <v-col cols="4">
+                <v-select clearable :items="allLineNames" variant="outlined" :label="$t('Line Name')" density="compact"
+                  v-model="filter.line_name"></v-select>
+              </v-col>
+
+            </v-row>
+          </v-card-text>
+        </v-card>
+
+        <v-data-table :items="filteredRules" :headers="headers">
           <template v-slot:item.outputs="{ value }">
             <v-chip v-for="output in value" :key="output" class="ma-1" size="small" color="success">
               {{ output.name }} : {{ output.percent }}%
@@ -32,9 +62,11 @@
               ][value]
             }}
           </template>
+
         </v-data-table>
       </v-col>
     </v-row>
+    {{ allLineNames }}
   </v-container>
 </template>
 
@@ -44,6 +76,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      filter: {},
       headers: [
         {
           title: this.$t("Line"),
@@ -75,10 +108,36 @@ export default {
   },
   inject: ["backend_base_url"],
   methods: {},
-  computed: {},
+  computed: {
+    allLineNames() {
+      var rules;
+      rules = this.rules.map((item) => {
+        return item.line_name
+      }).reduce(function (a, b) {
+        if (a.indexOf(b) < 0) a.push(b);
+        return a;
+      }, [])
+      return rules;
+    },
+    filteredRules() {
+      let filteredData = this.rules;
+      if (this.filter.day) {
+        filteredData = filteredData.filter(item => item.day_of_week == this.filter.day)
+      }
+
+      if (this.filter.line_name) {
+        filteredData = filteredData.filter(item => item.line_name == this.filter.line_name)
+      }
+
+      return filteredData;
+
+    }
+  },
   watch: {},
   methods: {
     async getRules() {
+
+      this.filter = {};
 
       this.loading = true;
       const { data } = await axios.get(this.backend_base_url + "/rules");
@@ -86,7 +145,10 @@ export default {
 
       this.loading = false;
     },
+
     remove(ruleId) {
+
+      if (!confirm("Are you sure?")) return;
 
       this.loading = true;
       axios.post(this.backend_base_url + "/rules/remove", {

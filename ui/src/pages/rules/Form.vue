@@ -1,14 +1,19 @@
 <template>
   <v-container>
-    <v-row class="border rounded-lg pa-10">
+    <v-row class=" pa-10">
       <v-col>
         <v-text-field
           variant="outlined"
           density="compact"
           :label="$t('Line Name')"
           v-model="rule.line_name"
+          :error-messages="errors.line_name"
         />
         <v-select
+        multiple
+        chips
+        closable-chips
+        clearable
           :items="[
             { name: $t('Saturday'), value: '0' },
             { name: $t('Sunday'), value: '1' },
@@ -23,7 +28,9 @@
           variant="outlined"
           :label="$t('Day Of Week')"
           density="compact"
-          v-model="rule.day_of_week"
+          v-model="rule.days"
+          
+          :error-messages="errors.days"
         ></v-select>
 
         <v-text-field
@@ -35,6 +42,8 @@
           :label="$t('Time From')"
           prepend-icon="mdi-clock-time-four-outline"
           readonly
+          
+          :error-messages="errors.time_from"
         >
           <v-dialog v-model="modal_from" activator="parent" width="auto">
             <v-time-picker
@@ -43,6 +52,7 @@
               :max="rule.time_to"
               format="24hr"
             >
+            
               <template v-slot:actions
                 ><v-btn @click="modal_from = null">Ok</v-btn>
               </template></v-time-picker
@@ -57,6 +67,7 @@
           :label="$t('Time To')"
           prepend-icon="mdi-clock-time-four-outline"
           readonly
+          :error-messages="errors.time_to"
         >
           <v-dialog v-model="modal_to" activator="parent" width="auto">
             <v-time-picker
@@ -82,7 +93,7 @@ import { VTimePicker } from "vuetify/labs/VTimePicker";
 
 export default {
   components: { VTimePicker },
-  props: ["rule"],
+  props: ["rule", "errors"],
   data() {
     return {
       modal_from: null,

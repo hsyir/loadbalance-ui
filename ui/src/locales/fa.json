@@ -15,10 +15,12 @@
     "Save": "ذخیره",
     "Edit": "ویرایش",
     "Insert": "افزودن",
+    "Remove": "حذف",
     "Percent": "درصد",
     "Output Title": "عنوان خروجی",
     "Outputs": "خروجی ها",
     "Create New Rule": "ایجاد قانون جدید",
+    "Any output has not been added yet.": "هیچ خروجی هنوز اضافه نشده است",
     "The selected time range overlaps with another scheduled program." 
         : "بازی زمانی انتخاب شده با یک یا چند قانون ثبت شده قبلی تداخل دارد.",
     "Check Sum": "صحت جمع درصد ها",
