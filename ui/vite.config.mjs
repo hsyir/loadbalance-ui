@@ -31,7 +31,7 @@ export default defineConfig({
   plugins: [
     vue(),
     vuetify(), 
-    // transformAssetURLs()
+    transformAssetURLs()
   ],
   build: {
     rollupOptions: {
