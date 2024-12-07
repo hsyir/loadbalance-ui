@@ -30,6 +30,7 @@
             <thead>
               <tr>
                 <th>{{ $t("Line Name") }}</th>
+                <th>{{ $t("Day Of Week") }}</th>
                 <th>{{ $t("Time From") }}</th>
                 <th>{{ $t("Time To") }}</th>
               </tr>
@@ -37,6 +38,15 @@
             <tbody>
               <tr v-for="r in overlap_rules" :key="r">
                 <td>{{ r.line_name }}</td>
+                <td>{{ [
+                  $t("Saturday"),
+                  $t("Sunday"),
+                  $t("Monday"),
+                  $t("Tuesday"),
+                  $t("Wednesday"),
+                  $t("Thursday"),
+                  $t("Friday"),
+                ][r.day_of_week] }}</td>
                 <td>{{ r.time_from }}</td>
                 <td>{{ r.time_to }}</td>
               </tr>

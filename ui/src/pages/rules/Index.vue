@@ -1,13 +1,20 @@
 <template>
   <v-container>
-    <v-row class="border rounded-lg pa-10">
-      <v-col>
-        <v-btn to="/rules/create" color="primary" class="mb-2" variant="outlined" prepend-icon="mdi-plus"
+    <v-row>
+      <v-col class="text-end"> 
+        
+        <v-btn to="/rules/create" color="primary" class="mb-2" variant="outlined" prepend-icon="mdi-plus" rounded
           :loading="loading">
           {{ $t("Create New Rule") }}</v-btn>
+      </v-col>
+    </v-row>
+    <v-row class="border rounded-lg pa-10">
+
+      <v-col>
 
 
-        <v-card class="mb-2">
+
+        <v-card class="mb-2" rounded="xl" elevation="0">
           <v-card-text>
             <v-row>
               <v-col>{{ $t("Filter") }}</v-col>
@@ -23,19 +30,19 @@
                   { name: $t('Thursday'), value: '5' },
                   { name: $t('Friday'), value: '6' },
                 ]" item-title="name" item-value="value" variant="outlined" :label="$t('Day Of Week')" density="compact"
-                  v-model="filter.day"></v-select>
+                  v-model="filter.day" rounded></v-select>
               </v-col>
 
               <v-col cols="4">
                 <v-select clearable :items="allLineNames" variant="outlined" :label="$t('Line Name')" density="compact"
-                  v-model="filter.line_name"></v-select>
+                  v-model="filter.line_name" rounded></v-select>
               </v-col>
 
             </v-row>
           </v-card-text>
         </v-card>
 
-        <v-data-table :items="filteredRules" :headers="headers">
+        <v-data-table :items="filteredRules" :headers="headers" class="rounded-xl">
           <template v-slot:item.outputs="{ value }">
             <v-chip v-for="output in value" :key="output" class="ma-1" size="small" color="success">
               {{ output.name }} : {{ output.percent }}%
@@ -66,7 +73,6 @@
         </v-data-table>
       </v-col>
     </v-row>
-    {{ allLineNames }}
   </v-container>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
 
-    <v-sheet class="pa-5" rounded elevation="4">
-        <div class="text-info">{{ rule.line_name }}</div>
+    <v-sheet class="pa-5" rounded="xl" elevation="1">
+        <div class="text-info mb-2"><strong>نام مسیر: </strong>{{ rule.line_name }}</div>
         <div>
             <strong>روز هفته: </strong>
             {{
@@ -18,7 +18,7 @@
         </div>
         <div class="my-1"><strong>{{ $t("Time From") }}</strong>: <v-chip>{{ rule.time_from }}</v-chip></div>
         <div><strong>{{ $t("Time To") }}</strong>: <v-chip>{{ rule.time_to }}</v-chip></div>
-        <v-table>
+        <v-table class="mt-2">
             <thead>
                 <tr>
                     <th>{{ $t("Title") }}</th>
@@ -27,6 +27,9 @@
                 </tr>
             </thead>
             <tbody>
+                <tr v-if="!rule.report || rule.report.length < 1">
+                    <td colspan="3" class="text-grey text-center">هیچ موردی ثبت نشده است.</td>
+                </tr>
                 <tr v-for="(count, output_name ) in rule.report">
                     <td>
                         {{ output_name }}
@@ -70,7 +73,7 @@ export default {
                 result[key] = ((value / this.total) * 100).toFixed(2); // با دقت دو رقم اعشار
                 return result;
             }, {});
-        }
+        },
 
 
     }
