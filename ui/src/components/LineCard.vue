@@ -1,5 +1,4 @@
 <template>
-
     <v-sheet class="pa-5" rounded="xl" elevation="1">
         <div class="text-info mb-2"><strong>نام مسیر: </strong>{{ rule.line_name }}</div>
         <div>
@@ -27,18 +26,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="!rule.report || rule.report.length < 1">
-                    <td colspan="3" class="text-grey text-center">هیچ موردی ثبت نشده است.</td>
-                </tr>
-                <tr v-for="(count, output_name ) in rule.report">
+                <tr v-for="(output) in rule.outputs">
                     <td>
-                        {{ output_name }}
+                        {{ output.name }}
                     </td>
                     <td>
-                        {{ count }}
+                        {{ counts[output.name] ?? "--" }}
                     </td>
-                    <td>
-                        {{ percentages[output_name] }}
+                    <td>{{ output.percent }} <span class="text-grey">({{ percentages[output.name] ?? "--" }})</span>
                     </td>
                 </tr>
             </tbody>
@@ -74,6 +69,13 @@ export default {
                 return result;
             }, {});
         },
+
+        counts() {
+            return Object.entries(this.rule.report).reduce((result, [key, value]) => {
+                result[key] = value  // با دقت دو رقم اعشار
+                return result;
+            }, {});
+        }
 
 
     }

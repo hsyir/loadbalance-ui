@@ -27,7 +27,6 @@
           label="Selected Times"
         ></v-select>
       </v-col>
-      <v-btn to="/rules">rules</v-btn>
       <v-col cols="6">
         <v-slide-y-transition>
           <v-row v-if="selected_line != ''">
