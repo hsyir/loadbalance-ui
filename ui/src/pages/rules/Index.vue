@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="text-end"> 
-        
+      <v-col class="text-end">
+
         <v-btn to="/rules/create" color="primary" class="mb-2" variant="outlined" prepend-icon="mdi-plus" rounded
           :loading="loading">
           {{ $t("Create New Rule") }}</v-btn>
@@ -42,16 +42,58 @@
           </v-card-text>
         </v-card>
 
+
+        <v-expand-transition>
+          <v-card class="mb-2" rounded="xl" elevation="0" v-if="selected_rules.length > 0">
+            <v-card-text>
+              <v-row>
+                <v-col>{{ $t("Actions") }}</v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="4">
+                  <v-dialog max-width="500" v-model="activeBulkEdit">
+                    <template v-slot:activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" v-model="activeBulkEdit" color="info" rounded density="compact"
+                        :text="$t('Edit Outputs')" variant="outlined"></v-btn>
+                    </template>
+
+                    <template v-slot:default="{ isActive }">
+                      <v-card title="Dialog">
+                        <v-card-text>
+                          <outputs :outputs="edit_outputs" :errors="errors" />
+                        </v-card-text>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+
+                          <v-btn :text="$t('Save')" @click="submitBulkEdit"></v-btn>
+                          <v-btn :text="$t('Back')" @click="isActive.value = false"></v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+
+
+
+
+                </v-col>
+
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-expand-transition>
+
+
         <v-data-table :items="filteredRules" :headers="headers" class="rounded-xl">
           <template v-slot:item.outputs="{ value }">
             <v-chip v-for="output in value" :key="output" class="ma-1" size="small" color="success">
               {{ output.name }} : {{ output.percent }}%
             </v-chip>
           </template>
+          <template v-slot:item.select="{ item, value }">
+            <v-checkbox :value="item.id" v-model="selected_rules" />
+          </template>
           <template v-slot:item.actions="{ item, value }">
-            <v-btn :to="'rules/' + item.id + '/show'" size="x-small" rounded variant="flat" color="primary">{{
-              $t("Edit")
-            }}</v-btn>
             <v-btn @click="remove(item.id)" size="x-small" rounded variant="flat" color="red">{{
               $t("Remove")
             }}</v-btn>
@@ -78,12 +120,23 @@
 
 <script>
 import axios from "axios";
+import Outputs from "./Outputs.vue";
 
 export default {
+  components: { Outputs },
   data() {
     return {
+      selected_rules: [],
+      errors: {},
+      bulkEditLoading: false,
+      edit_outputs: [],
+      activeBulkEdit: false,
       filter: {},
       headers: [
+        {
+          title: "",
+          key: "select",
+        },
         {
           title: this.$t("Line"),
           key: "line_name",
@@ -113,7 +166,6 @@ export default {
     };
   },
   inject: ["backend_base_url"],
-  methods: {},
   computed: {
     allLineNames() {
       var rules;
@@ -141,6 +193,60 @@ export default {
   },
   watch: {},
   methods: {
+
+    submitBulkEdit() {
+      let hasError = false;
+
+      if (!this.edit_outputs || this.edit_outputs.length < 1) {
+        hasError = true;
+        this.errors['outputs'] = this.$t("Add one or more outputs")
+      } else if (this.edit_outputs.reduce(function (a, b) {
+        return +a + +b.percent;
+      }, 0) != 100) {
+        hasError = true;
+        this.errors['outputs'] = this.$t("Total value of output percents must be equal to 100")
+      }
+
+
+      if (hasError)
+        return;
+
+      this.bulkEditLoading = true;
+      axios.post(this.backend_base_url + '/rules/bulk_edit', {
+        selected_rules: this.selected_rules,
+        outputs: this.edit_outputs,
+      })
+        .then(res => {
+          if (res.data.success) {
+
+
+            this.$notify({
+              type: "success",
+              duration: 2000,
+              text: "Data has been removed SUCCESSFULLY!",
+            });
+
+            this.activeBulkEdit = false;
+            this.selected_rules = [];
+            this.edit_outputs = [];
+            this.getRules();
+            this.errors = {};
+
+
+          }
+        })
+        .catch(err=>{
+          this.$notify({
+              type: "error",
+              duration: 2000,
+              text: "there are some errors!",
+            });
+
+        })
+        .then(() => {
+          this.bulkEditLoading = false;
+        })
+    },
     async getRules() {
 
       this.filter = {};
