@@ -94,6 +94,9 @@
             <v-checkbox :value="item.id" v-model="selected_rules" />
           </template>
           <template v-slot:item.actions="{ item, value }">
+            <v-btn :to="'rules/' + item.id + '/show'" size="x-small" rounded variant="flat" color="primary">{{
+              $t("Edit")
+            }}</v-btn>
             <v-btn @click="remove(item.id)" size="x-small" rounded variant="flat" color="red">{{
               $t("Remove")
             }}</v-btn>
